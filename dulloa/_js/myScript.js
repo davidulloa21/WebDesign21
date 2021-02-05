@@ -11,6 +11,7 @@ const ctx = canvas.getContext('2d');
 ctx.fillStyle = 'green';
 ctx.fillRect(10, 10, 150, 100);
 
+//creates function to draw the triangle
 function drawTriangle() {
     var canvas = document.getElementById('canvas');
     if (canvas.getContext) {
@@ -36,6 +37,7 @@ function drawSquare (){
     ctx.lineTo(75, 75);
     ctx.fill();
 }
+}
 
 function drawCircle(){
   var canvas = document.getElementById('canvasSquare');
@@ -47,6 +49,7 @@ function drawCircle(){
     ctx.moveTo(75, 50);
     ctx.stroke();
     ctx.fill();
+}
 }
 
 function main(){
