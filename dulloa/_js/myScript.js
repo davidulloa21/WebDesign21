@@ -1,19 +1,24 @@
 
 //alert("hello world")
 
+//alerts the site
 const myNum= 6;
 const myName= "David"
 alert(myName);
 
+
+
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
+
+
 
 ctx.fillStyle = 'green';
 ctx.fillRect(10, 10, 150, 100);
 
 //creates function to draw the triangle
 function drawTriangle() {
-    var canvas = document.getElementById('canvas');
+    var canvas = document.getElementById('canvasSquare');
     if (canvas.getContext) {
       console.log("")
       var ctx = canvas.getContext('2d');
@@ -52,8 +57,26 @@ function drawCircle(){
 }
 }
 
-function main(){
+function draw(){
     drawTriangle();
     drawSquare();
     drawCircle();
+}
+
+let drawTri = true;
+let drawCir = true;
+let drawSqu = true;
+
+
+d = new Date();
+function main(){
+  if (d < 3){
+    drawTriangle();
+  }
+  else if (d < 4) {
+    drawSquare();
+  }
+  else {
+    drawCircle();
+  }
 }
