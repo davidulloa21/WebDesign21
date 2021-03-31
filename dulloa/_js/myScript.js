@@ -1,38 +1,20 @@
+alert("hello")
 
-//alert("hello world")
-
-//alerts the site
-const myNum= 6;
-const myName= "David"
-alert(myName);
-
-
-
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-
-
-
-ctx.fillStyle = 'green';
-ctx.fillRect(10, 10, 150, 100);
-
-//creates function to draw the triangle
 function drawTriangle() {
-    var canvas = document.getElementById('canvasSquare');
-    if (canvas.getContext) {
-      console.log("")
-      var ctx = canvas.getContext('2d');
-      ctx.beginPath();
-      ctx.moveTo(75, 50);
-      ctx.lineTo(100, 75);
-      ctx.lineTo(100, 25);
-      ctx.fill();
-    }
+  var canvas = document.getElementById('canvas');
+  if (canvas.getContext) {
+    console.log("")
+    var ctx = canvas.getContext('2d');
+    ctx.beginPath();
+    ctx.moveTo(75, 50);
+    ctx.lineTo(100, 75);
+    ctx.lineTo(100, 25);
+    ctx.fill();
   }
-
+}
 
 function drawSquare (){
-  var canvas = document.getElementById('canvasSquare');
+  var canvas = document.getElementById('canvas');
   if (canvas.getContext) {
     console.log("this thing evaluated to true...")
     var ctx = canvas.getContext('2d');
@@ -45,7 +27,7 @@ function drawSquare (){
 }
 
 function drawCircle(){
-  var canvas = document.getElementById('canvasSquare');
+  var canvas = document.getElementById('canvas');
   if (canvas.getContext) {
     console.log("this thing evaluated to true...")
     var ctx = canvas.getContext('2d');
@@ -63,20 +45,21 @@ function draw(){
     drawCircle();
 }
 
-let drawTri = true;
-let drawCir = true;
-let drawSqu = true;
 
-
-d = new Date();
-function main(){
-  if (d < 3){
-    drawTriangle();
-  }
-  else if (d < 4) {
-    drawSquare();
-  }
-  else {
-    drawCircle();
-  }
+function randomNumber(max){
+  return Math.floor(Math.random() * Math.floor(max));
 }
+
+console.log (randomNumber(3))
+
+let fruit = ["bananas", "apples", "oranges"]
+console.log(fruit);
+console.log(fruit[1]);
+console.log(fruit[2]);
+console.log(fruit[3]);
+
+let cpu = ["rock", "paper", "scissors"];
+
+let cpuChoice = Math.floor(Math.random()*cpu.length);
+
+console.log(cpu[cpuChoice]);
