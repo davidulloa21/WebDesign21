@@ -3,55 +3,37 @@
 <!--used as a container for the html items.-->
 <html>
 
-<button style="color:blueviolet;" type="button">
-    about us 
-</button>
-<button style="color:blueviolet;" type="button">
-    shop 
-</button>
-<button style="color:blueviolet;" type="button"> 
-    contact 
-</button>
-<button style="color:blueviolet;" type="button">
-   home
- </button>
-<style>
-  .buttons {
-    color: chartreuse;
-  }
-</style>
-
-<script>
-  function myFunction() {
-    window.open(bcp.instructure.com/courses/7219) ;
-  }
-</script>
-
-
-<!--begins a header on a page which has all 
-    the informqtion of the web page.-->
-
 <head>
-  <!--has the character encoding which converts t he 0 and 1 to 
-      words and letters-->
   <meta charset="utf-8">
-  <!--names the website-->
-  <title>My test page</title>
-  <!--ends the header-->
+  <title>my web</title>
+<link rel="stylesheet" type="text/css" href="_css/myStyle.css">
+<script src="_js/myScript.js"></script>
 </head>
 
 
 
-<!--begins the body on a websitew-->
+<button style="color:blueviolet;" type="button">
+    Rock
+</button>
+<button style="color:blueviolet;" type="button">
+    Paper
+</button>
+<button style="color:blueviolet;" type="button"> 
+    Scissors
+</button>
 
-<body>
-  <!--begin and ends a header-->
-  <h1>First Heading...</h1>
-  <!--begins and ends a paragraph-->
-  <p1>First Paragraph...</p1>
-  <!--ends  the body-->
+
+<body onload="draw()">
+
+  <canvas id="canvas" width="400" height="200"></canvas>
+
 </body>
-<!--ends website-->
+
+ 
+
+
+
+
 
 
 
