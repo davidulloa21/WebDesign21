@@ -1,6 +1,32 @@
-let canvasDiv;
-let canvas;
-let ctx;
+//When writing this code, I refered from info in class and your code and also recieved some help from a friend.
+//settings for the bricks rows columns and width and height.
+var rows = 13;
+var columns = 3;
+var bwidth = 100;
+var bheight = 30;
+var brickPadding = 10;
+//distance right and left from the borders
+var brickright = 30;
+var brickleft = 30;
+//variables used during the game
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+//descriptions for the ball radius and height in the game
+var radius = 20;
+var x = canvas.width/2;
+var y = canvas.height-30;
+var dx = 10;
+var dy = -10;
+//height and width for the paddle used by the user
+var pheight = 20;
+var pwidth = 300;
+var paddle = (canvas.width-pwidth)/2;
+var keydownpaddle = false;
+var keydownpaddle2 = false;
+//variables for the score and the lives the player has.
+var score = 0;
+var lives = 1;
+//explains the rows and columns that are going to be used
 let WIDTH = 1470;
 let HEIGHT= 720;
 let GRAVITY = 9.8;
@@ -15,82 +41,101 @@ let mouseX = 0;
 let mouseY = 0;
 let mouseClickX = 0;
 let mouseClickY = 0;
+var bricks = []
+;
+for(var c=0; c<columns; c++) {
+  bricks[c] = [];
 
-function spawnMob(x, arr){
-  for (i = 0; i < x; i++){
-    arr.push(new Mob(10,10,10, 10, 'pink', Math.random()*-2, Math.random()*-2));
+  for(var r=0; r<rows; r++) {
+    bricks[c][r] = { x: 0, y: 0, status: 1 };
   }
-  }
-function drawText(color, font, align, base, text, x, y) {
-  ctx.fillStyle = color;
-  ctx.font = font;
-  ctx.textAlign = align;
-  ctx.textBaseline = base;
-  ctx.fillText(text, x, y);
 }
-function init() {
+/* function init() {
     
-    canvasDiv = document.createElement("div");
-    canvasDiv.id = "chuck";
-    canvas = document.createElement('canvas');
-    // add the text node to the newly created div
-    canvasDiv.appendChild(canvas);
-    const currentDiv = document.getElementById("div1");
-    document.body.insertBefore(canvasDiv, currentDiv);
-    canvas.width = 1470;
-    canvas.height = 720;
-    document.getElementById("chuck").style.width = canvas.width + 'px';
-    document.getElementById("chuck").style.height = canvas.height + 'px';
-    ctx = canvas.getContext('2d');
-    initialized = true;
+  canvasDiv = document.createElement("div");
+  canvasDiv.id = "chuck";
+  canvas = document.createElement('canvas');
+  // add the text node to the newly created div
+  canvasDiv.appendChild(canvas);
+  const currentDiv = document.getElementById("div1");
+  document.body.insertBefore(canvasDiv, currentDiv);
+  canvas.width = 1470;
+  canvas.height = 720;
+  document.getElementById("chuck").style.width = canvas.width + 'px';
+  document.getElementById("chuck").style.height = canvas.height + 'px';
+  ctx = canvas.getContext('2d');
+  initialized = true;
+} 
+*/
+//functions draws and performs all the functions used for the game.
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  spawnBricks();
+  drawScore();
+  hearts();
+  collisions();
+  ball();
+  userPaddle();
+
+
+
+  //explains how the user would lose in the game.
+  if(x + dx > canvas.width-radius || x + dx < radius) {
+    dx = -dx;
   }
-  
- /* function countUp(end) {
-    timerNow = Math.floor(Date.now() / 1000);
-    currentTimer = timerNow - timerThen;
-    if (currentTimer >= end){
-      if (mobs2.length < 10){
-      spawnMob(1, mobs2);
+
+  if(y + dy < radius) {
+    dy = -dy;
+  }
+
+  //explains how the user loses if the ball goes past the paddle
+  else if(y + dy > canvas.height-radius) {
+    if(x > paddle && x < paddle + pwidth) {
+      dy = -dy;
     }
-      return end;
+
+    //sends out a game over message to the user
+    else {
+      lives--;
+      if(!lives) {
+        //only alerts if the lives have run out
+        alert("Game Over");
+        document.location.reload();
+      }
+
+      //if lives have not run out yet, this is used to restart the game.
+      else {
+        paddle = (canvas.width-pwidth)/2;
+        //resets the paddle onto the board
+        y = canvas.height-28;
+        dx = 2;
+        dy = -2;
+        x = canvas.width/2;
+        
+      }
     }
-    return currentTimer;
   }
-  
-  function counter() {
-    timerNow = Math.floor(Date.now() / 1000);
-    currentTimer = timerNow - timerThen;
-    return currentTimer;
+//sets paddle back in its place for a new live
+  if(keydownpaddle && paddle < canvas.width-pwidth) {
+    paddle += 6;
   }
-  
-  function timerUp(x, y) {
-    timerNow = Math.floor(Date.now() / 1000);
-    currentTimer = timerNow - timerThen;
-    if (currentTimer <= y && typeof (currentTimer + x) != "undefined") {
-        return currentTimer;
-    } else {
-        timerThen = timerNow;
-        return x;
-    }
+  else if(keydownpaddle2 && paddle > 0) {
+    paddle -= 6;
   }
-  
-  function timerDown() {
-    this.time = function (x, y) {
-        // this.timerThen = Math.floor(Date.now() / 1000);
-        // this.timerNow = Math.floor(Date.now() / 1000);
-        this.timerThen = timerThen;
-        this.timerNow = Math.floor(Date.now() / 1000);
-        this.tick = this.timerNow - this.timerThen;
-        if (this.tick <= y && typeof (this.tick + x) != "undefined") {
-            return y - this.tick;
-        } else {
-            this.timerThen = this.timerNow;
-            return x;
-        }
-    };
-  }
-  */
-  class Sprite {
+
+  x += dx;
+  y += dy;
+  requestAnimationFrame(draw);
+}
+//function to create the ball with the radius and color.
+function ball() {
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, Math.PI*4);
+  ctx.fillStyle = "#DDDDDD";
+  ctx.fill();
+  ctx.closePath();
+}
+/* class Sprite {
     constructor(w, h, x, y, c) {
       this.w = w;
       this.h = h;
@@ -121,123 +166,9 @@ function init() {
         }
       }
   }
-  
-  class Player extends Sprite {
-    constructor(w, h, x, y, c, vx, vy) {
-    super(w, h, x, y, c);
-    this.vx = vx;
-    this.vy = vy;
-    this.speed = 3;
-    this.canjump = true;
-    }
-    moveinput() {
-      if ('a' in keysDown || 'A' in keysDown) { // Player control
-          this.vy = 0;
-          this.vx = -this.speed;
-      } else if ('d' in keysDown || 'D' in keysDown) { // Player control
-          this.vy = 0;
-          this.vx = this.speed;
-      }
-      else{
-        this.vx = 0;
-        this.vy = 0;
-      }
-  }
-    update(){
-      this.moveinput();
-      if (!this.inbounds()){
-        if (this.x <= 0) {
-          this.x = 0;
-        }
-        if (this.x + this.w >= WIDTH) {
-          this.x = WIDTH-this.w;
-        }
-        if (this.y+this.h >= HEIGHT) {
-          this.y = HEIGHT-this.h;
-          this.canjump = true;
-        }
-        // alert('out of bounds');
-        // console.log('out of bounds');
-      }
-      
-      this.x += this.vx;
-      this.y += this.vy;
-    }
-    draw() {
-      ctx.fillStyle = this.color;
-      ctx.fillRect(this.x, this.y, this.w, this.h);
-      ctx.strokeRect(this.x, this.y, this.w, this.h);
-    }
-  }
-  
-  class Mob extends Sprite {
-    constructor(w, h, x, y, c, vx, vy) {
-      super(w, h, x, y, c);
-      this.vx = vx;
-      this.vy = vy;
-      this.type = "normal";
-      }
-      update(){
-        this.x += this.vx;
-        this.y += this.vy;
-        if (!this.inbounds()){
-          if (this.x < 0 || this.x > WIDTH) {
-            this.vx *= -1;
-          }
-          if (this.y < 0 || this.y > HEIGHT) {
-            this.vy *= -1;
-          }
-          // alert('out of bounds');
-          // console.log('out of bounds');
-        }
-      }
-      draw() {
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.w, this.h);
-        ctx.strokeRect(this.x, this.y, this.w, this.h);
-      }
-  }
-  
-  class Wall extends Sprite {
-    constructor(w, h, x, y, c) {
-      super(w, h, x, y, c);
-      this.type = "normal";
-      }
-      draw() {
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.w, this.h);
-        ctx.strokeRect(this.x, this.y, this.w, this.h);
-      }
-  }
-  
-  // ###################### INSTANTIATE CLASSES ##########################
-  let player = new Player(200, 10, WIDTH/2, 700, 'red', 0, 0);
-  
-  // adds two different sets of mobs to the mobs array
-  //for (i = 0; i < 10; i++){
-  //  mobs1.push(new Mob(60,60, 200, 100, 'pink', Math.random()*-2, Math.random()*-2));
-  //}
-  for (x=0; x < 100; x++){
-    for(y=0; y < 10; y++){
-          walls.push(new Wall(10, 10, 10*x, 10*y, 'orange'));
-    }
-}
-  // ########################## USER INPUT ###############################
-  
-  let keysDown = {};
-  
-  addEventListener("keydown", function (e) {
-      keysDown[e.key] = true;
-  }, false);
-  
-  addEventListener("keyup", function (e) {
-      delete keysDown[e.key];
-  }, false);
-  
-  
-  
- 
-  // ########## UPDATE ALL ELEMENTS ON CANVAS ################################
+  */
+
+  /*
   function update() {
     player.update();
     //updates all mobs in a group
@@ -258,44 +189,121 @@ function init() {
         mobs1.splice(m, 1);
       }
     }
-  }
-  
-  // ########## DRAW ALL ELEMENTS ON CANVAS ##########
-  function draw() {
-    // clears the canvas before drawing
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawText('black', "24px Helvetica", "left", "top", "Points: " + POINTS, 0, 0);
-    player.draw();
-  
-    for (let w of walls){
-      w.draw();
+  } */
+//allows the user to control the paddle with the right and left arrow keys
+function keyDown(e) {
+    //explains what happens if keybinds are pressed down upon
+    if(e.key == "Right" || e.key == "ArrowRight") {
+        keydownpaddle = true;
     }
-    for (let m of mobs1){
-      m.draw();
+    //left side
+    else if(e.key == "Left" || e.key == "ArrowLeft") {
+        keydownpaddle2 = true;
     }
-   
+}
+
+function keyUp(e) {
+  //explains what happens if keybinds are released
+    if(e.key == "Right" || e.key == "ArrowRight") {
+        keydownpaddle = false;
+    }
+    else if(e.key == "Left" || e.key == "ArrowLeft") {
+        keydownpaddle2 = false;
+    }
+}
+
+//THIS IS WHAT I ADDED
+//I made this using one of my friends help in which it allows you to control the paddle with your mouses movements.
+function mouseMoveHandler(e) {
+  var relativeX = e.clientX - canvas.offsetLeft;
+
+  //allows the paddle to follow mouse movements
+  if(relativeX > 0 && relativeX < canvas.width) {
+    paddle = relativeX - pwidth/2;
   }
-  
-  
-  // set variables necessary for game loop
-  let fps;
-  let now;
-  let delta;
-  let gDelta;
-  let then = performance.now();
-  
-  // ########## MAIN GAME LOOP ##########
-  function main() {
-    now = performance.now();
-    delta = now - then;
-    gDelta = (Math.min(delta, 17));
-    fps = Math.ceil(1000 / gDelta);
-    if (initialized) {
-      if (!paused){
-        update(gDelta);
+}
+
+//function for when the ball collides into the bricks in the game
+
+function collisions() {
+  for(var c=0; c<columns; c++) {
+    //says if the ball hits a brick to break and bounce
+    //also explains how you win by removing all blocks
+    for(var r=0; r<rows; r++) {
+      var b = bricks[c][r];
+      if(b.status == 1) {
+        //bricks being removed
+        if(x > b.x && x < b.x+bwidth && y > b.y && y < b.y+bheight) {
+          dy = -dy;
+          b.status = 0;
+          score++;
+          if(score == rows*columns) {
+            //alerts what happens if all blocks disappear
+            alert("You Won");
+            //reloads the game
+            document.location.reload();
+          }
+        }
       }
-      draw();
     }
-    then = now;
-    requestAnimationFrame(main);
   }
+}
+
+//function for the lives including font and color
+function hearts() {
+  ctx.font = "20px Times New Roman";
+  //number of lives and location of the lives tab
+  ctx.fillText("Lives: "+lives, 8, 20);
+  ctx.fillStyle = "FF0000";
+}
+
+//function to draw paddle which goes to the variables above
+function userPaddle() {
+  ctx.beginPath();
+  ctx.rect(paddle, canvas.height-pheight
+  , pwidth, pheight
+  );
+  ctx.fillStyle = "#FFFF96";
+  ctx.fill();
+  ctx.closePath();
+}
+
+//function for the bricks which go to the variables above
+function spawnBricks() {
+  //inticates columns in the bricks
+  for(var c=0; c<columns; c++) {
+    //shows the amount of rows
+    for(var r=0; r<rows; r++) {
+      if(bricks[c][r].status == 1) {
+        var brickX = (r*(bwidth+brickPadding))+brickleft;
+        var brickY = (c*(bheight+brickPadding))+brickright;
+        bricks[c][r].x = brickX;
+        bricks[c][r].y = brickY;
+        //color and shape of brick
+        ctx.beginPath();
+        ctx.rect(brickX, brickY, bwidth, bheight);
+        ctx.fillStyle = "#FF0000";
+        ctx.fill();
+        ctx.closePath();
+      }
+    }
+  }
+}
+
+
+//function for the score in the game with the font and size.
+function drawScore() {
+  ctx.font = "30px Times New Roman";
+//score and font
+  ctx.fillText("Score: "+score, canvas.width-200, 20);
+  ctx.fillStyle = "#FF0000";
+}
+
+
+
+
+//says how the keybind of the arrows will be if pressed
+document.addEventListener("keydown", keyDown, false);
+document.addEventListener("keyup", keyUp, false);
+document.addEventListener("mousemove", mouseMoveHandler, false);
+draw();
