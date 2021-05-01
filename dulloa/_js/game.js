@@ -291,7 +291,13 @@ function spawnBricks() {
 }
 
 
-
+//function for the score in the game with the font and size.
+function drawScore() {
+  ctx.font = "30px Times New Roman";
+//score and font
+  ctx.fillText("Score: "+score, canvas.width-200, 20);
+  ctx.fillStyle = "#FF0000";
+}
 
 
 
@@ -301,3 +307,17 @@ function spawnBricks() {
 document.addEventListener("keyup", keyUp, false);
 document.addEventListener("mousemove", mouseMoveHandler, false);
 draw();
+
+
+function drawCircle(){
+  var canvas = document.getElementById('canvas');
+  if (canvas.getContext) {
+    console.log("this thing evaluated to true...")
+    var ctx = canvas.getContext('2d');
+    ctx.beginPath();
+    ctx.arc(50, 50, 25, 0, 2 * Math.PI);
+    ctx.moveTo(75, 50);
+    ctx.stroke();
+    ctx.fill();
+}
+}
