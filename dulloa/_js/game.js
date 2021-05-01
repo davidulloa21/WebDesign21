@@ -267,7 +267,7 @@ function userPaddle() {
   ctx.fill();
   ctx.closePath();
 }
-
+document.addEventListener("keydown", keyDown, false);
 //function for the bricks which go to the variables above
 function spawnBricks() {
   //inticates columns in the bricks
@@ -291,19 +291,13 @@ function spawnBricks() {
 }
 
 
-//function for the score in the game with the font and size.
-function drawScore() {
-  ctx.font = "30px Times New Roman";
-//score and font
-  ctx.fillText("Score: "+score, canvas.width-200, 20);
-  ctx.fillStyle = "#FF0000";
-}
 
 
 
 
-//says how the keybind of the arrows will be if pressed
-document.addEventListener("keydown", keyDown, false);
+
+//says how the keybind of the arrows will be if presse
+
 document.addEventListener("keyup", keyUp, false);
 document.addEventListener("mousemove", mouseMoveHandler, false);
 draw();
