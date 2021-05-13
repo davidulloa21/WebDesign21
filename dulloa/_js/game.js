@@ -135,61 +135,7 @@ function ball() {
   ctx.fill();
   ctx.closePath();
 }
-/* class Sprite {
-    constructor(w, h, x, y, c) {
-      this.w = w;
-      this.h = h;
-      this.x = x;
-      this.y = y;
-      this.color = c;
-      this.spliced = false;
-      }
-      inbounds(){
-        if (this.x + this.w < WIDTH &&
-            this.x > 0 &&
-            this.y > 0 &&
-            this.y + this.h < HEIGHT){
-              console.log ('inbounds..');
-          return true;
-        }
-        else{
-          return false;
-        }
-      }
-      collide(obj) {
-        if (this.x <= obj.x + obj.w &&
-          obj.x <= this.x + this.w &&
-          this.y <= obj.y + obj.h &&
-          obj.y <= this.y + this.h
-        ) {
-          return true;
-        }
-      }
-  }
-  */
 
-  /*
-  function update() {
-    player.update();
-    //updates all mobs in a group
-    for (let w of walls){
-      console.log(w);
-      if (player.collide(w)){
-        console.log(w);
-      }
-    }
-    for (let m of mobs1){
-      m.update();
-      if (player.collide(m)){
-        m.spliced = true;
-      }
-    }
-    for (let m in mobs1){
-      if (mobs1[m].spliced){
-        mobs1.splice(m, 1);
-      }
-    }
-  } */
 //allows the user to control the paddle with the right and left arrow keys
 function keyDown(e) {
     //explains what happens if keybinds are pressed down upon
@@ -253,8 +199,8 @@ function collisions() {
 function hearts() {
   ctx.font = "20px Times New Roman";
   //number of lives and location of the lives tab
-  ctx.fillText("Lives: "+lives, 8, 20);
   ctx.fillStyle = "FF0000";
+  ctx.fillText("Level: "+lives, 8, 20);
 }
 
 //function to draw paddle which goes to the variables above
@@ -309,15 +255,3 @@ document.addEventListener("mousemove", mouseMoveHandler, false);
 draw();
 
 
-function drawCircle(){
-  var canvas = document.getElementById('canvas');
-  if (canvas.getContext) {
-    console.log("this thing evaluated to true...")
-    var ctx = canvas.getContext('2d');
-    ctx.beginPath();
-    ctx.arc(50, 50, 25, 0, 2 * Math.PI);
-    ctx.moveTo(75, 50);
-    ctx.stroke();
-    ctx.fill();
-}
-}
