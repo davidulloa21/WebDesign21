@@ -1,5 +1,10 @@
-//When writing this code, I refered from info in class and your code and also recieved some help from a friend.
+//When writing this code, I refered from info in class and your code and also recieved some help from a friend who has done this kind of coding in the past.
 //settings for the bricks rows columns and width and height.
+//Some websites i used to help
+//https://stackoverflow.com/questions/1484506/random-color-generator
+//https://www.tutorialrepublic.com/faq/how-to-change-the-background-color-of-a-web-page-using-javascript.php
+//
+//
 var rows = 13;
 var columns = 3;
 var bwidth = 100;
@@ -25,7 +30,7 @@ var keydownpaddle = false;
 var keydownpaddle2 = false;
 //variables for the score and the lives the player has.
 var score = 0;
-var lives = 1;
+var lives = 3;
 //explains the rows and columns that are going to be used
 let WIDTH = 1470;
 let HEIGHT= 720;
@@ -42,6 +47,9 @@ let mouseY = 0;
 let mouseClickX = 0;
 let mouseClickY = 0;
 var bricks = []
+var color = Math.floor(Math.random()*16777215).toString(16);
+// var color = ctx.fillStyle
+
 ;
 for(var c=0; c<columns; c++) {
   bricks[c] = [];
@@ -131,7 +139,7 @@ function draw() {
 function ball() {
   ctx.beginPath();
   ctx.arc(x, y, radius, 0, Math.PI*4);
-  ctx.fillStyle = "#DDDDDD";
+  ctx.fillStyle = Math.floor(Math.random()*16777215).toString(16);;
   ctx.fill();
   ctx.closePath();
 }
@@ -182,7 +190,12 @@ function collisions() {
         if(x > b.x && x < b.x+bwidth && y > b.y && y < b.y+bheight) {
           dy = -dy;
           b.status = 0;
+          
           score++;
+
+          if (score == 2) {
+            ball.color = "#000000";
+          }
           if(score == rows*columns) {
             //alerts what happens if all blocks disappear
             alert("You Won");
@@ -195,11 +208,11 @@ function collisions() {
   }
 }
 
+
 //function for the lives including font and color
 function hearts() {
   ctx.font = "20px Times New Roman";
   //number of lives and location of the lives tab
-  ctx.fillStyle = "FF0000";
   ctx.fillText("Level: "+lives, 8, 20);
 }
 
@@ -228,7 +241,7 @@ function spawnBricks() {
         //color and shape of brick
         ctx.beginPath();
         ctx.rect(brickX, brickY, bwidth, bheight);
-        ctx.fillStyle = "#FF0000";
+        ctx.fillStyle = "#FFFF00";
         ctx.fill();
         ctx.closePath();
       }
